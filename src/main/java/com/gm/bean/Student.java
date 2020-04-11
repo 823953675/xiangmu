@@ -7,6 +7,14 @@ public class Student {
     private int uid;
     private String stuName;
 
+    public Student() {
+    }
+
+    public Student(int uid, String stuName) {
+        this.uid = uid;
+        this.stuName = stuName;
+    }
+
     public int getUid() {
         return uid;
     }
