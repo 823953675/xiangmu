@@ -6,4 +6,28 @@ package com.gm.bean;
 public class Student {
     private int uid;
     private String stuName;
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public String getStuName() {
+        return stuName;
+    }
+
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "uid=" + uid +
+                ", stuName='" + stuName + '\'' +
+                '}';
+    }
 }
