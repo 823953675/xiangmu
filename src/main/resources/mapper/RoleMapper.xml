@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gm.dao.IRoleDao" >
+
+
+
+
+    <select id="findAllRole" resultType="com.gm.bean.Role">
+        select * from  tb_role
+    </select>
+
+
+
+    <select id="addRole" resultType="com.gm.bean.Role">
+        insert into tb_role(rname,rdesc) values (#{rname},#{rdesc})
+    </select>
+
+
+
+    <select id="delRoleById" resultType="com.gm.bean.Role">
+        delete from tb_role where rid=#{rid}
+    </select>
+
+
+    <!--修改前查询-->
+    <select id="updSelRoleById" parameterType="Integer" resultType="com.gm.bean.Role">
+        select * from tb_role where rid=#{rid}
+    </select>
+
+    <!--修改-->
+    <select id="updRole" resultType="com.gm.bean.Role">
+        update tb_role set rname=#{rname},rdesc=#{rdesc},raddres=#{raddres},rphone=#{rphone} where rid=#{rid}
+    </select>
+
+    <!--关联表-->
+    <select id="findRoleByUserId" parameterType="Integer" resultType="com.gm.bean.Role">
+        select * from tb_role where rid in(select rid from tb_user_role where uid=#{uid})
+
+    </select>
+
+</mapper>

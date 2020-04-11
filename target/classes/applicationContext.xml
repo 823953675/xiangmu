@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+<!--spring 和Mybatis 的整合-->
+<!--1、配置数据库相关参数-->
+    <context:property-placeholder location="classpath:db.properties"/>
+<!--2、配置数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="maxPoolSize" value="30"/>
+        <property name="minPoolSize" value="2"/>
+    </bean>
+
+    <!--3、配置sqlSessionFactory对象-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据库连接池-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--扫描dao层包 使用别名-->
+        <property name="typeAliasesPackage" value="com.gm.dao"/>
+        <!--配合加载映射文件 *mapper.xml-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+
+        <!--分页配置-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <props>
+                            <prop key="helperDialect"></prop>
+                            <prop key="reasonable"></prop>
+                        </props>
+                    </property>
+
+                </bean>
+            </array>
+        </property>
+
+    </bean>
+    <!--自动生成dao，mapper-->
+    <!--自动生成dao接口包，将dao策藏注入spring容器中-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--配置给出需要扫描的dao层路径-->
+        <property name="basePackage" value="com.gm.dao"/>
+        <!--注入Spring容器中-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!--自动扫描全部包-->
+    <context:component-scan base-package="com.gm"/>
+    <!--配置事务注解-->
+    <bean id="transctionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven></tx:annotation-driven>
+</beans>

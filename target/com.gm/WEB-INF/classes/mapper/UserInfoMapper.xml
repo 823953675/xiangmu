@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gm.dao.IUserInfoDao" >
+
+    <!--登陆-->
+    <select id="doLogin" parameterType="String" resultType="com.gm.bean.UserInfo">
+        select  * from tb_user where username=#{username}
+    </select>
+
+    <!--全部查询-->
+    <select id="findAll" resultType="com.gm.bean.UserInfo">
+        select * from tb_user
+    </select>
+
+    <!--增加-->
+    <select id="addUser" parameterType="com.gm.bean.UserInfo" resultType="com.gm.bean.UserInfo">
+        insert into tb_user(id,username,password) values(#{id},#{username},#{password})
+    </select>
+
+    <!--删除-->
+    <select id="delUserById" parameterType="Integer" resultType="com.gm.bean.UserInfo">
+        delete  from  tb_user where id=#{id}
+    </select>
+
+    <!--修改-->
+    <select id="updUserInfo" parameterType="com.gm.bean.UserInfo" resultType="com.gm.bean.UserInfo">
+        update tb_user
+        <set>
+            <if test="username!=null">username=#{username},</if>
+            <if test="password!=null">password=#{password}</if>
+        </set>
+        where id=#{id}
+    </select>
+
+    <!--修改前查询-->
+    <select id="updSelUserInfoById" parameterType="Integer" resultType="com.gm.bean.UserInfo">
+        select * from tb_user where id=#{id}
+    </select>
+
+    <!--搜功能索引-->
+    <select id="searUserInfo" parameterType="String" resultType="com.gm.bean.UserInfo">
+        select * from tb_user where username=#{username}
+    </select>
+
+</mapper>

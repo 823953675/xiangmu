@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+  <!--配置加载路径文件-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:applicationContext.xml,classpath*:spring-security.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  <!--解决中文乱码-->
+  <filter>
+    <filter-name>characterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+<filter-mapping>
+  <filter-name>characterEncodingFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>
+  <!--前端控制器,制定加载-->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring-mvc.xml</param-value>
+    </init-param>
+    <!--让服务器启动的时候，就进行创建servlet对象-->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <!--
+          /*   把用户端所有请求都当做requestMapping指定的路径处理，都会进controller
+          /    页面不会拦截
+          -->
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+
+  <!--&lt;!&ndash;使用filter 实现登陆控制&ndash;&gt;-->
+  <!--<filter>-->
+    <!--<filter-name>SesseionFilter</filter-name>-->
+    <!--<filter-class>com.gm.filter.LoginFilter</filter-class>-->
+  <!--</filter>-->
+  <!--<filter-mapping>-->
+    <!--<filter-name>SesseionFilter</filter-name>-->
+    <!--<url-pattern>/pages/*</url-pattern>-->
+    <!--<url-pattern>*.jsp</url-pattern>-->
+    <!--<url-pattern>/css/*</url-pattern>-->
+    <!--<url-pattern>/img/*</url-pattern>-->
+  <!--</filter-mapping>-->
+
+
+
+<!--配置Spring Security的过滤器，会拦截所有的请求-->
+  <!--在进入服务器Tomcat之后，但进入servlet之前生效/出生-->
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+    .
